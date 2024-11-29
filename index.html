@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zazzle Design Size Calculator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        header h1 {
+            color: #040570;
+            font-family: 'Arial', sans-serif;
+            font-size: 36px;
+        }
+
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px;
+            margin: 0 10px;
+            cursor: pointer;
+            border: 2px solid #040570;
+            border-radius: 5px;
+            font-size: 18px;
+            background-color: #fff;
+            color: #040570;
+        }
+
+        .tab.active {
+            background-color: #040570;
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            display: block;
+            margin-right: 10px;
+            width: 250px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 5px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .form-group input[type="button"] {
+            background-color: #040570;
+            color: #ffffff;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            padding: 12px;
+            font-size: 18px;
+        }
+
+        .form-group input[type="button"]:hover {
+            background-color: #033a63;
+        }
+
+        .output {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            display: none;
+        }
+
+        footer {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        footer .ruler-icon {
+            font-size: 24px; /* Icon size */
+        }
+
+        footer p {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #040570;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+
+        .icon {
+            margin-left: 10px;
+            font-size: 20px;
+            color: #040570;
+        }
+
+        .cm .icon {
+            display: none;
+        }
+
+        .inches .icon {
+            display: inline-block;
+        }
+
+        .cm input {
+            display: inline-block;
+        }
+
+        .inches input {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Zazzle Design Size Calculator</h1>
+            <p>Measure your design and calculate its size on Zazzle's products.</p>
+        </header>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" id="inchesTab" onclick="toggleUnits('inches')">Inches</div>
+            <div class="tab" id="cmTab" onclick="toggleUnits('cm')">CM</div>
+        </div>
+
+        <!-- Form for Inches -->
+        <div class="form-group inches" id="actualWidthGroup">
+            <label for="actualWidth">Actual Design Area Width</label>
+            <input type="number" id="actualWidth" placeholder="e.g., 5.00" step="0.01">
+            <span class="icon">in</span>
+        </div>
+
+        <div class="form-group inches" id="actualHeightGroup">
+            <label for="actualHeight">Actual Design Area Height</label>
+            <input type="number" id="actualHeight" placeholder="e.g., 7.00" step="0.01">
+            <span class="icon">in</span>
+        </div>
+
+        <div class="form-group inches" id="onScreenWidthGroup">
+            <label for="onScreenWidth">Measured On-Screen Design Area Width</label>
+            <input type="number" id="onScreenWidth" placeholder="e.g., 4.00" step="0.01">
+            <span class="icon">in</span>
+        </div>
+
+        <div class="form-group inches" id="onScreenHeightGroup">
+            <label for="onScreenHeight">Measured On-Screen Design Area Height</label>
+            <input type="number" id="onScreenHeight" placeholder="e.g., 6.00" step="0.01">
+            <span class="icon">in</span>
+        </div>
+
+        <div class="form-group inches" id="designElementWidthGroup">
+            <label for="designElementWidth">Design Element Width</label>
+            <input type="number" id="designElementWidth" placeholder="e.g., 2.00" step="0.01">
+            <span class="icon">in</span>
+        </div>
+
+        <div class="form-group inches" id="designElementHeightGroup">
+            <label for="designElementHeight">Design Element Height</label>
+            <input type="number" id="designElementHeight" placeholder="e.g., 2.00" step="0.01">
+            <span class="icon">in</span>
+        </div>
+
+        <!-- Form for CM -->
+        <div class="form-group cm" id="actualWidthGroupCM" style="display: none;">
+            <label for="actualWidthCM">Actual Design Area Width</label>
+            <input type="number" id="actualWidthCM" placeholder="e.g., 12.70" step="0.01">
+            <span class="icon">cm</span>
+        </div>
+
+        <div class="form-group cm" id="actualHeightGroupCM" style="display: none;">
+            <label for="actualHeightCM">Actual Design Area Height</label>
+            <input type="number" id="actualHeightCM" placeholder="e.g., 17.78" step="0.01">
+            <span class="icon">cm</span>
+        </div>
+
+        <div class="form-group cm" id="onScreenWidthGroupCM" style="display: none;">
+            <label for="onScreenWidthCM">Measured On-Screen Design Area Width</label>
+            <input type="number" id="onScreenWidthCM" placeholder="e.g., 10.16" step="0.01">
+            <span class="icon">cm</span>
+        </div>
+
+        <div class="form-group cm" id="onScreenHeightGroupCM" style="display: none;">
+            <label for="onScreenHeightCM">Measured On-Screen Design Area Height</label>
+            <input type="number" id="onScreenHeightCM" placeholder="e.g., 15.24" step="0.01">
+            <span class="icon">cm</span>
+        </div>
+
+        <div class="form-group cm" id="designElementWidthGroupCM" style="display: none;">
+            <label for="designElementWidthCM">Design Element Width</label>
+            <input type="number" id="designElementWidthCM" placeholder="e.g., 5.08" step="0.01">
+            <span class="icon">cm</span>
+        </div>
+
+        <div class="form-group cm" id="designElementHeightGroupCM" style="display: none;">
+            <label for="designElementHeightCM">Design Element Height</label>
+            <input type="number" id="designElementHeightCM" placeholder="e.g., 5.08" step="0.01">
+            <span class="icon">cm</span>
+        </div>
+
+        <div class="form-group">
+            <input type="button" value="Calculate Design Size" onclick="calculateDesignSize()">
+        </div>
+
+       
