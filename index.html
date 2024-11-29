@@ -13,6 +13,7 @@
             margin: 0;
             padding: 20px;
         }
+
         .container {
             max-width: 900px;
             margin: 0 auto;
@@ -20,20 +21,53 @@
             background-color: #ffffff;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
+
         header {
             text-align: center;
             margin-bottom: 20px;
         }
+
         header h1 {
             color: #040570;
+            font-family: 'Arial', sans-serif;
+            font-size: 36px;
         }
-        .form-group {
+
+        .tabs {
+            display: flex;
+            justify-content: center;
             margin-bottom: 20px;
         }
+
+        .tab {
+            padding: 10px;
+            margin: 0 10px;
+            cursor: pointer;
+            border: 2px solid #040570;
+            border-radius: 5px;
+            font-size: 18px;
+            background-color: #fff;
+            color: #040570;
+        }
+
+        .tab.active {
+            background-color: #040570;
+            color: #fff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+
         .form-group label {
             font-weight: bold;
             display: block;
+            margin-right: 10px;
+            width: 200px;
         }
+
         .form-group input {
             width: 100%;
             padding: 10px;
@@ -42,7 +76,8 @@
             border: 2px solid #ddd;
             border-radius: 5px;
         }
-        .form-group input[type=button] {
+
+        .form-group input[type="button"] {
             background-color: #040570;
             color: #ffffff;
             cursor: pointer;
@@ -51,9 +86,11 @@
             padding: 12px;
             font-size: 18px;
         }
-        .form-group input[type=button]:hover {
+
+        .form-group input[type="button"]:hover {
             background-color: #033a63;
         }
+
         .output {
             margin-top: 20px;
             font-size: 18px;
@@ -61,10 +98,12 @@
             color: #333;
             display: none;
         }
+
         footer {
             margin-top: 40px;
             text-align: center;
         }
+
         footer .z-logo {
             display: inline-block;
             width: 30px;
@@ -77,71 +116,73 @@
             text-align: center;
             font-weight: bold;
         }
+
         footer p {
             margin-top: 10px;
             font-size: 14px;
             color: #040570;
         }
+
         .error {
             color: red;
             font-weight: bold;
         }
-        .unit-conversion {
-            margin-top: 30px;
-        }
-        .unit-conversion label {
-            font-weight: bold;
-            display: block;
-            margin-bottom: 10px;
-        }
-        .unit-conversion input {
-            padding: 10px;
-            font-size: 16px;
-            margin-top: 5px;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-        }
-        .unit-conversion .conversion-result {
-            margin-top: 10px;
+
+        .icon {
+            margin-left: 10px;
+            font-size: 20px;
+            color: #040570;
         }
     </style>
 </head>
 <body>
-
     <div class="container">
         <header>
             <h1>Zazzle Design Size Calculator</h1>
             <p>Measure your design and calculate its size on Zazzle's products.</p>
         </header>
 
-        <div class="form-group">
-            <label for="actualWidth">Actual Design Area Width (in inches or cm)</label>
+        <!-- Tabs -->
+        <div class="tabs">
+            <div class="tab active" id="inchesTab" onclick="toggleUnits('inches')">Inches</div>
+            <div class="tab" id="cmTab" onclick="toggleUnits('cm')">CM</div>
+        </div>
+
+        <!-- Form -->
+        <div class="form-group" id="actualWidthGroup">
+            <label for="actualWidth">Actual Design Area Width</label>
             <input type="number" id="actualWidth" placeholder="e.g., 5.00" step="0.01">
+            <span class="icon">in</span>
         </div>
 
-        <div class="form-group">
-            <label for="actualHeight">Actual Design Area Height (in inches or cm)</label>
+        <div class="form-group" id="actualHeightGroup">
+            <label for="actualHeight">Actual Design Area Height</label>
             <input type="number" id="actualHeight" placeholder="e.g., 7.00" step="0.01">
+            <span class="icon">in</span>
         </div>
 
-        <div class="form-group">
-            <label for="onScreenWidth">Measured On-Screen Design Area Width (in inches or cm)</label>
+        <div class="form-group" id="onScreenWidthGroup">
+            <label for="onScreenWidth">Measured On-Screen Design Area Width</label>
             <input type="number" id="onScreenWidth" placeholder="e.g., 4.00" step="0.01">
+            <span class="icon">in</span>
         </div>
 
-        <div class="form-group">
-            <label for="onScreenHeight">Measured On-Screen Design Area Height (in inches or cm)</label>
+        <div class="form-group" id="onScreenHeightGroup">
+            <label for="onScreenHeight">Measured On-Screen Design Area Height</label>
             <input type="number" id="onScreenHeight" placeholder="e.g., 6.00" step="0.01">
+            <span class="icon">in</span>
         </div>
 
-        <div class="form-group">
-            <label for="designElementWidth">Design Element Width (in inches or cm)</label>
+        <div class="form-group" id="designElementWidthGroup">
+            <label for="designElementWidth">Design Element Width</label>
             <input type="number" id="designElementWidth" placeholder="e.g., 2.00" step="0.01">
+            <span class="icon">in</span>
         </div>
 
-        <div class="form-group">
-            <label for="designElementHeight">Design Element Height (in inches or cm)</label>
+        <div class="form-group" id="designElementHeightGroup">
+            <label for="designElementHeight">Design Element Height</label>
             <input type="number" id="designElementHeight" placeholder="e.g., 2.00" step="0.01">
+            <span class="icon">in</span>
         </div>
 
         <div class="form-group">
@@ -154,20 +195,33 @@
 
         <div class="error" id="error"></div>
 
-        <!-- Unit Conversion Section -->
-        <div class="unit-conversion">
-            <label for="unitInput">Convert Inches to Centimeters (or vice versa)</label>
-            <input type="number" id="unitInput" placeholder="Enter value" step="0.01">
-            <div class="conversion-result" id="conversionResult"></div>
-        </div>
+        <footer>
+            <div class="z-logo">Z</div>
+            <p>Powered by Zazzle</p>
+        </footer>
     </div>
 
-    <footer>
-        <div class="z-logo">Z</div>
-        <p>Powered by Zazzle</p>
-    </footer>
-
     <script>
+        function toggleUnits(unit) {
+            let unitElements = document.querySelectorAll('.icon');
+            let activeTab = document.querySelector('.tab.active');
+            let newActiveTab = unit === 'inches' ? document.getElementById('inchesTab') : document.getElementById('cmTab');
+            let newUnit = unit === 'inches' ? 'in' : 'cm';
+
+            // Hide icons that don't match the selected unit
+            unitElements.forEach(function (icon) {
+                if (icon.innerText === newUnit) {
+                    icon.style.display = 'inline-block';
+                } else {
+                    icon.style.display = 'none';
+                }
+            });
+
+            // Switch active tab
+            activeTab.classList.remove('active');
+            newActiveTab.classList.add('active');
+        }
+
         function calculateDesignSize() {
             let actualWidth = parseFloat(document.getElementById('actualWidth').value);
             let actualHeight = parseFloat(document.getElementById('actualHeight').value);
@@ -179,44 +233,29 @@
             let output = document.getElementById('output');
             let calculatedWidth = document.getElementById('calculatedWidth');
             let calculatedHeight = document.getElementById('calculatedHeight');
-            
-            // Check if all fields have valid inputs
+
+            // Clear previous error or output messages
+            error.textContent = '';
+            output.style.display = 'none';
+
+            // Validate the inputs
             if (isNaN(actualWidth) || isNaN(actualHeight) || isNaN(onScreenWidth) || isNaN(onScreenHeight) || isNaN(designElementWidth) || isNaN(designElementHeight)) {
-                error.innerText = 'Error: Please enter valid numbers in all fields.';
-                output.style.display = 'none';
+                error.textContent = 'Please enter valid numeric values for all fields.';
                 return;
-            } else {
-                error.innerText = '';
             }
-            
-            // Calculate ratio
+
+            // Perform the calculation (assuming the ratio calculation is correct)
             let widthRatio = actualWidth / onScreenWidth;
             let heightRatio = actualHeight / onScreenHeight;
-            
-            // Calculate new design element size
-            let newDesignElementWidth = designElementWidth * widthRatio;
-            let newDesignElementHeight = designElementHeight * heightRatio;
-            
+
+            let finalWidth = designElementWidth * widthRatio;
+            let finalHeight = designElementHeight * heightRatio;
+
             // Display the result
-            calculatedWidth.innerText = newDesignElementWidth.toFixed(2);
-            calculatedHeight.innerText = newDesignElementHeight.toFixed(2);
+            calculatedWidth.textContent = finalWidth.toFixed(2);
+            calculatedHeight.textContent = finalHeight.toFixed(2);
             output.style.display = 'block';
         }
-
-        // Unit conversion (Inches to cm and vice versa)
-        document.getElementById('unitInput').addEventListener('input', function() {
-            let value = parseFloat(this.value);
-            let result = document.getElementById('conversionResult');
-            if (isNaN(value)) {
-                result.innerText = '';
-                return;
-            }
-
-            // Convert inches to cm or cm to inches
-            let conversion = value * 2.54;  // Conversion factor
-            result.innerText = `${value} inches = ${conversion.toFixed(2)} cm`;
-        });
     </script>
-
 </body>
 </html>
