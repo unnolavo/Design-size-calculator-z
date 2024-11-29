@@ -65,7 +65,7 @@
             font-weight: bold;
             display: block;
             margin-right: 10px;
-            width: 200px;
+            width: 250px;
         }
 
         .form-group input {
@@ -133,6 +133,22 @@
             font-size: 20px;
             color: #040570;
         }
+
+        .cm .icon {
+            display: none;
+        }
+
+        .inches .icon {
+            display: inline-block;
+        }
+
+        .cm input {
+            display: none;
+        }
+
+        .inches input {
+            display: inline-block;
+        }
     </style>
 </head>
 <body>
@@ -149,37 +165,37 @@
         </div>
 
         <!-- Form -->
-        <div class="form-group" id="actualWidthGroup">
+        <div class="form-group inches" id="actualWidthGroup">
             <label for="actualWidth">Actual Design Area Width</label>
             <input type="number" id="actualWidth" placeholder="e.g., 5.00" step="0.01">
             <span class="icon">in</span>
         </div>
 
-        <div class="form-group" id="actualHeightGroup">
+        <div class="form-group inches" id="actualHeightGroup">
             <label for="actualHeight">Actual Design Area Height</label>
             <input type="number" id="actualHeight" placeholder="e.g., 7.00" step="0.01">
             <span class="icon">in</span>
         </div>
 
-        <div class="form-group" id="onScreenWidthGroup">
+        <div class="form-group inches" id="onScreenWidthGroup">
             <label for="onScreenWidth">Measured On-Screen Design Area Width</label>
             <input type="number" id="onScreenWidth" placeholder="e.g., 4.00" step="0.01">
             <span class="icon">in</span>
         </div>
 
-        <div class="form-group" id="onScreenHeightGroup">
+        <div class="form-group inches" id="onScreenHeightGroup">
             <label for="onScreenHeight">Measured On-Screen Design Area Height</label>
             <input type="number" id="onScreenHeight" placeholder="e.g., 6.00" step="0.01">
             <span class="icon">in</span>
         </div>
 
-        <div class="form-group" id="designElementWidthGroup">
+        <div class="form-group inches" id="designElementWidthGroup">
             <label for="designElementWidth">Design Element Width</label>
             <input type="number" id="designElementWidth" placeholder="e.g., 2.00" step="0.01">
             <span class="icon">in</span>
         </div>
 
-        <div class="form-group" id="designElementHeightGroup">
+        <div class="form-group inches" id="designElementHeightGroup">
             <label for="designElementHeight">Design Element Height</label>
             <input type="number" id="designElementHeight" placeholder="e.g., 2.00" step="0.01">
             <span class="icon">in</span>
@@ -208,16 +224,16 @@
             let newActiveTab = unit === 'inches' ? document.getElementById('inchesTab') : document.getElementById('cmTab');
             let newUnit = unit === 'inches' ? 'in' : 'cm';
 
-            // Hide icons that don't match the selected unit
-            unitElements.forEach(function (icon) {
-                if (icon.innerText === newUnit) {
-                    icon.style.display = 'inline-block';
+            // Switch between inches and cm inputs
+            document.querySelectorAll('.form-group').forEach(function(formGroup) {
+                if (formGroup.classList.contains(unit)) {
+                    formGroup.style.display = 'flex';
                 } else {
-                    icon.style.display = 'none';
+                    formGroup.style.display = 'none';
                 }
             });
 
-            // Switch active tab
+            // Show the active tab
             activeTab.classList.remove('active');
             newActiveTab.classList.add('active');
         }
@@ -240,18 +256,19 @@
 
             // Validate the inputs
             if (isNaN(actualWidth) || isNaN(actualHeight) || isNaN(onScreenWidth) || isNaN(onScreenHeight) || isNaN(designElementWidth) || isNaN(designElementHeight)) {
-                error.textContent = 'Please enter valid numeric values for all fields.';
+                error.textContent = 'Please make sure all fields are filled with valid numbers.';
                 return;
             }
 
-            // Perform the calculation (assuming the ratio calculation is correct)
-            let widthRatio = actualWidth / onScreenWidth;
-            let heightRatio = actualHeight / onScreenHeight;
+            // Calculate scaling factor
+            let scalingFactorX = actualWidth / onScreenWidth;
+            let scalingFactorY = actualHeight / onScreenHeight;
 
-            let finalWidth = designElementWidth * widthRatio;
-            let finalHeight = designElementHeight * heightRatio;
+            // Apply scaling to the design element dimensions
+            let finalWidth = designElementWidth * scalingFactorX;
+            let finalHeight = designElementHeight * scalingFactorY;
 
-            // Display the result
+            // Update output
             calculatedWidth.textContent = finalWidth.toFixed(2);
             calculatedHeight.textContent = finalHeight.toFixed(2);
             output.style.display = 'block';
